@@ -1,39 +1,4 @@
-メモ
-モデル構築に必要な特徴量
-・時間
-・月
-・年齢
-・職業
-・施錠状態
-・緯度
-・経度
-
-以下の特徴量は初期設定時のみに登録
-・年齢
-・職業
-
-以下の特徴量は判定毎に登録
-・時間
-・月
-・施錠状態
-・緯度
-・経度
-
-スコア判定のトークフロー
-lineUser -スコア判定
-bot -年齢は？ lineUser -20
-bot -職業は？ lineUser -3
-bot -位置情報は？ lineUser -緯度経度
-この時に`時間`と`月`は暗示的に取得する
-bot 安全スコアはXXXです！！スコア判定を終了します
-
-lineUserObj.patternについて
--1:職業入力待ち
-0:初期設定(年齢/職業の設定値)完了
-1:
-2:
-3:
-
-
-安全スコア判定を行う
-位置情報を取得する
+### Construction of virtual environment
+> python3 -m venv testEnv
+> source testEnv/bin/activate
+> pip3 install -r requirements.txt
