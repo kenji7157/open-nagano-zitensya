@@ -1,0 +1,1 @@
+web: gunicorn naganoZitensya.wsgi --log-file -
