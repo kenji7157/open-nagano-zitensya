@@ -53,6 +53,7 @@ def callback(request):
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
     lineUserText = event.message.text
+    print('------------------lineUserText-------------------', lineUserText)
     profile = line_bot_api.get_profile(event.source.user_id)
     lineUserObj = LineUser.objects.filter(user_id=profile.user_id).first()
     if not lineUserObj:
