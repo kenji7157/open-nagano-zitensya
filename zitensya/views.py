@@ -39,6 +39,8 @@ def index(request):
 
 @csrf_exempt
 def callback(request):
+    print('---------------- request ------------------')
+    print(request)
     signature = request.META['HTTP_X_LINE_SIGNATURE']
     body = request.body.decode('utf-8')
     try:
