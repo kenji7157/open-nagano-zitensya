@@ -24,7 +24,7 @@ age_list = ["10歳代", "20歳代", "30歳代", "40歳代", "50歳代", "60歳�
 age_items = [QuickReplyButton(action=MessageAction(label=f"{age}", text=f"{age}")) for age in age_list]
 occupation_list = ["小学生", "中学生", "高校生", "大学生", "その他"]
 occupation_items = [QuickReplyButton(action=MessageAction(label=f"{occupation}", text=f"{occupation}")) for occupation in occupation_list]            
-mode_list = ["設定を変更する", "安全スコア判定を行う"]
+mode_list = ["設定を変更する", "Calculate safety score"]
 mode_items = [QuickReplyButton(action=MessageAction(label=f"{mode}", text=f"{mode}")) for mode in mode_list]
 rock_list = ["施錠した", "施錠していない"]
 rock_items = [QuickReplyButton(action=MessageAction(label=f"{rock}", text=f"{rock}")) for rock in rock_list]             
