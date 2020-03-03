@@ -92,6 +92,8 @@ def handle_text_message(event):
                                 quick_reply=QuickReply(items=mode_items))
     elif lineUserObj.pattern == 1:
         messages = errorMessage(lineUserText, mode_list, lineUserObj.pattern)
+        print('------------ messages --------------')
+        print(messages)
         if len(messages) == 0:
             if lineUserText == "Setting":
                 messages = [
