@@ -20,7 +20,7 @@ YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
-age_list = ["teens", "twenties", "thirties", "forties", "fifties", "sixties", "twenties"]
+age_list = ["10-19", "20-29", "30-39", "40-49", "50-59", "60-69", "70-over"]
 age_items = [QuickReplyButton(action=MessageAction(label=f"{age}", text=f"{age}")) for age in age_list]
 occupation_list = ["Schoolchild", "Mid school students", "High school student", "College student", "Other"]
 occupation_items = [QuickReplyButton(action=MessageAction(label=f"{occupation}", text=f"{occupation}")) for occupation in occupation_list]            
