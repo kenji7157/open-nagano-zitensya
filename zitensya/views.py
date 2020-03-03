@@ -20,15 +20,15 @@ YOUR_CHANNEL_SECRET = os.environ["YOUR_CHANNEL_SECRET"]
 line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(YOUR_CHANNEL_SECRET)
 
-age_list = ["10歳代", "20歳代", "30歳代", "40歳代", "50歳代", "60歳代", "70歳代"]
+age_list = ["teens", "twenties", "thirties", "forties", "fifties", "sixties", "twenties"]
 age_items = [QuickReplyButton(action=MessageAction(label=f"{age}", text=f"{age}")) for age in age_list]
-occupation_list = ["小学生", "中学生", "高校生", "大学生", "その他"]
+occupation_list = ["Schoolchild", "Mid school students", "High school student", "College student", "Other"]
 occupation_items = [QuickReplyButton(action=MessageAction(label=f"{occupation}", text=f"{occupation}")) for occupation in occupation_list]            
-mode_list = ["設定を変更する", "Calculate score"]
+mode_list = ["Setting", "Calculate score"]
 mode_items = [QuickReplyButton(action=MessageAction(label=f"{mode}", text=f"{mode}")) for mode in mode_list]
-rock_list = ["施錠した", "施錠していない"]
+rock_list = ["Locked", "Not Locked"]
 rock_items = [QuickReplyButton(action=MessageAction(label=f"{rock}", text=f"{rock}")) for rock in rock_list]             
-locale_list = ["位置情報の送信"]
+locale_list = ["Send location information"]
 local_items = [QuickReplyButton(action=LocationAction(label=f"{local}", text=f"{local}")) for local in locale_list]    
 
 def index(request):
@@ -39,8 +39,6 @@ def index(request):
 
 @csrf_exempt
 def callback(request):
-    print('---------------- request ------------------')
-    print(request)
     signature = request.META['HTTP_X_LINE_SIGNATURE']
     body = request.body.decode('utf-8')
     try:
@@ -53,7 +51,6 @@ def callback(request):
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
     lineUserText = event.message.text
-    print('------------------lineUserText-------------------', lineUserText)
     profile = line_bot_api.get_profile(event.source.user_id)
     lineUserObj = LineUser.objects.filter(user_id=profile.user_id).first()
     if not lineUserObj:
@@ -61,8 +58,8 @@ def handle_text_message(event):
                     display_name=profile.display_name)
         lineUser.save()
         messages = [
-            TextSendMessage(text="ユーザ情報の設定を行います"),
-            TextSendMessage(text="年齢を選択してください",
+            TextSendMessage(text="Start setting user information"),
+            TextSendMessage(text="Select your age",
                 quick_reply=QuickReply(items=age_items))
             ]
     elif lineUserObj.pattern == -1:
@@ -71,54 +68,54 @@ def handle_text_message(event):
             lineUserObj.age = lineUserText[:2]
             lineUserObj.pattern = 0
             lineUserObj.save()
-            messages = TextSendMessage(text="職業を選択してください",
+            messages = TextSendMessage(text="Select your occupation",
                                 quick_reply=QuickReply(items=occupation_items))
     elif lineUserObj.pattern == 0:
         messages = errorMessage(lineUserText, occupation_list, lineUserObj.pattern)
         if len(messages) == 0:
-            if lineUserText == "小学生":
+            if lineUserText == "Schoolchild":
                 lineUserObj.occupation = 0
-            elif lineUserText == "中学生":
+            elif lineUserText == "Mid school students":
                 lineUserObj.occupation = 1
-            elif lineUserText == "高校生":
+            elif lineUserText == "High school student":
                 lineUserObj.occupation = 2
-            elif lineUserText == "大学生":
+            elif lineUserText == "College student"":
                 lineUserObj.occupation = 3
-            elif lineUserText == "その他":
+            elif lineUserText == "Other":
                 lineUserObj.occupation = 4            
             lineUserObj.pattern = 1
             lineUserObj.save()
-            messages = TextSendMessage(text="設定(年齢と職業の設定)が完了しました",
+            messages = TextSendMessage(text="Finish setting user information",
                                 quick_reply=QuickReply(items=mode_items))
     elif lineUserObj.pattern == 1:
         messages = errorMessage(lineUserText, mode_list, lineUserObj.pattern)
         if len(messages) == 0:
-            if lineUserText == "設定を変更する":
+            if lineUserText == "Setting":
                 messages = [
-                    TextSendMessage(text="ユーザ情報を再設定します"),
-                    TextSendMessage(text="年齢を選択してください",
+                    TextSendMessage(text="Reset user information"),
+                    TextSendMessage(text="Select your age",
                     quick_reply=QuickReply(items=age_items))
                     ]
                 lineUserObj.pattern = -1
                 lineUserObj.save()
-            elif lineUserText == "安全スコア判定を行う":
-                messages = TextSendMessage(text="施錠状態を選択してください",
+            elif lineUserText == "Calculate safety score":
+                messages = TextSendMessage(text="Select the locked state of your bicycle",
                                quick_reply=QuickReply(items=rock_items))
                 lineUserObj.pattern = 2
                 lineUserObj.save()
     elif lineUserObj.pattern == 2:
         messages = errorMessage(lineUserText, rock_list, lineUserObj.pattern)
         if len(messages) == 0:
-            if lineUserText == "施錠した":
+            if lineUserText == "Locked":
                 lineUserObj.is_rock = 1
-            elif lineUserText == "施錠していない":
+            elif lineUserText == "Not Locked":
                 lineUserObj.is_rock = 0
             lineUserObj.pattern = 3
             lineUserObj.save()
-            messages = TextSendMessage(text="位置情報を送信してください",
+            messages = TextSendMessage(text="Send location information",
                             quick_reply=QuickReply(items=local_items))
     elif lineUserObj.pattern == 3:
-        messages = TextSendMessage(text="位置情報を送信してください",
+        messages = TextSendMessage(text="Send location information",
                             quick_reply=QuickReply(items=local_items))
     line_bot_api.reply_message(event.reply_token, messages=messages)
 
@@ -136,19 +133,18 @@ def handle_location_message(event):
         lineUserObj.save()
         # 安全スコア判定を行う
         score = calculateScore(lineUserObj)
-        state = '安全'
+        state = 'safety'
         if score < 10:
-            state = '危険'
+            state = 'Danger'
         elif score < 15:
-            state = 'やや危険'
+            state = 'Somewhat dangerous'
         elif score < 20:
-            state = '普通'
+            state = 'usually'
         else:
-            state = '安全'
+            state = 'safety'
         messages = [
-            TextSendMessage(text="安全スコアは【" + str(score) + "】です。"),
-            TextSendMessage(text="あなたの自転車は【" + state + "】な状態です。",
-                            quick_reply=QuickReply(items=mode_items))
+            TextSendMessage(text="Safety score is 【" + str(score) + "】"),
+            TextSendMessage(text="Your bicycle is in 【" + state + "】")
             ]
     line_bot_api.reply_message(event.reply_token, messages=messages)
 
@@ -219,17 +215,17 @@ def calculateScore(lineUserObj):
 def errorMessage(lineUserMessage, messageList, pattern):
     messages = []
     if not lineUserMessage in messageList:
-        messages.append(TextSendMessage(text="画面下のボタンから入力を選択して下さい"))
+        messages.append(TextSendMessage(text="Select an input from the button at the bottom"))
         if pattern == -1:
-            messages.append(TextSendMessage(text="年齢を選択してください", quick_reply=QuickReply(items=age_items)))
+            messages.append(TextSendMessage(text="Select your age", quick_reply=QuickReply(items=age_items)))
         if pattern == 0:
-            messages.append(TextSendMessage(text="職業を選択してください", quick_reply=QuickReply(items=occupation_items)))
+            messages.append(TextSendMessage(text="Select your occupation", quick_reply=QuickReply(items=occupation_items)))
         if pattern == 1:
-            messages.append(TextSendMessage(text="操作を選んでください", quick_reply=QuickReply(items=mode_items)))
+            messages.append(TextSendMessage(text="Select an action", quick_reply=QuickReply(items=mode_items)))
         if pattern == 2:
-            messages.append(TextSendMessage(text="施錠状態を選択してください", quick_reply=QuickReply(items=rock_items)))
+            messages.append(TextSendMessage(text="Select the locked state of your bicycle", quick_reply=QuickReply(items=rock_items)))
         if pattern == 3:
-            messages.append(TextSendMessage(text="位置情報を送信してください", quick_reply=QuickReply(items=local_items)))
+            messages.append(TextSendMessage(text="Send your location", quick_reply=QuickReply(items=local_items)))
     return messages
 
 # 変換後の緯度経度をlineUserObjに保存
