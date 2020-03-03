@@ -221,7 +221,8 @@ def errorMessage(lineUserMessage, messageList, pattern):
         if pattern == 0:
             messages.append(TextSendMessage(text="Select your occupation", quick_reply=QuickReply(items=occupation_items)))
         if pattern == 1:
-            messages.append(TextSendMessage(text="Select an action", quick_reply=QuickReply(items=mode_items)))
+            # リッチメニューで対応するため、コメントアウト
+            # messages.append(TextSendMessage(text="Select an action", quick_reply=QuickReply(items=mode_items)))
         if pattern == 2:
             messages.append(TextSendMessage(text="Select the locked state of your bicycle", quick_reply=QuickReply(items=rock_items)))
         if pattern == 3:
