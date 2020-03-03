@@ -55,6 +55,7 @@ def handle_text_message(event):
     lineUserObj = LineUser.objects.filter(user_id=profile.user_id).first()
     print('----- lineUserObj ------')
     print(lineUserObj)
+    print(lineUserObj.pattern)
     if not lineUserObj:
         lineUser = LineUser(user_id=profile.user_id,
                     display_name=profile.display_name)
