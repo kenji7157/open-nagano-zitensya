@@ -224,6 +224,7 @@ def errorMessage(lineUserMessage, messageList, pattern):
     if not lineUserMessage in messageList:
         messages.append(TextSendMessage(text="Select an input from the button at the bottom"))
         if pattern == -1:
+            print('ここまできてる？', pattern)
             messages.append(TextSendMessage(text="Select your age", quick_reply=QuickReply(items=age_items)))
         if pattern == 0:
             messages.append(TextSendMessage(text="Select your occupation", quick_reply=QuickReply(items=occupation_items)))
@@ -234,6 +235,7 @@ def errorMessage(lineUserMessage, messageList, pattern):
             messages.append(TextSendMessage(text="Select the locked state of your bicycle", quick_reply=QuickReply(items=rock_items)))
         if pattern == 3:
             messages.append(TextSendMessage(text="Send location", quick_reply=QuickReply(items=local_items)))
+    print('ここまできてる？2', messages)
     return messages
 
 # 変換後の緯度経度をlineUserObjに保存
