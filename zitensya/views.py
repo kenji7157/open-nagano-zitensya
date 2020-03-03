@@ -53,6 +53,8 @@ def handle_text_message(event):
     lineUserText = event.message.text
     profile = line_bot_api.get_profile(event.source.user_id)
     lineUserObj = LineUser.objects.filter(user_id=profile.user_id).first()
+    print('----- lineUserObj ------')
+    print(lineUserObj)
     if not lineUserObj:
         lineUser = LineUser(user_id=profile.user_id,
                     display_name=profile.display_name)
