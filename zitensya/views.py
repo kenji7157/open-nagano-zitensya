@@ -88,8 +88,7 @@ def handle_text_message(event):
                 lineUserObj.occupation = 4            
             lineUserObj.pattern = 1
             lineUserObj.save()
-            messages = TextSendMessage(text="Finish setting user information",
-                                quick_reply=QuickReply(items=mode_items))
+            messages = TextSendMessage(text="Finish setting user information")
     elif lineUserObj.pattern == 1:
         messages = errorMessage(lineUserText, mode_list, lineUserObj.pattern)
         print('------------ messages --------------')
