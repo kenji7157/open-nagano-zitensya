@@ -24,7 +24,7 @@ age_list = ["teens", "twenties", "thirties", "forties", "fifties", "sixties", "t
 age_items = [QuickReplyButton(action=MessageAction(label=f"{age}", text=f"{age}")) for age in age_list]
 occupation_list = ["Schoolchild", "Mid school students", "High school student", "College student", "Other"]
 occupation_items = [QuickReplyButton(action=MessageAction(label=f"{occupation}", text=f"{occupation}")) for occupation in occupation_list]            
-mode_list = ["Setting", "Calculate score"]
+mode_list = ["Setting", "Calculate safety score"]
 mode_items = [QuickReplyButton(action=MessageAction(label=f"{mode}", text=f"{mode}")) for mode in mode_list]
 rock_list = ["Locked", "Not Locked"]
 rock_items = [QuickReplyButton(action=MessageAction(label=f"{rock}", text=f"{rock}")) for rock in rock_list]             
