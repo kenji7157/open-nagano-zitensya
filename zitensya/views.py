@@ -219,15 +219,14 @@ def calculateScore(lineUserObj):
 
 def errorMessage(lineUserMessage, messageList, pattern):
     messages = []
+    print('----------- pattern -------------')
+    print(pattern)
     if not lineUserMessage in messageList:
         messages.append(TextSendMessage(text="Select an input from the button at the bottom"))
         if pattern == -1:
             messages.append(TextSendMessage(text="Select your age", quick_reply=QuickReply(items=age_items)))
         if pattern == 0:
             messages.append(TextSendMessage(text="Select your occupation", quick_reply=QuickReply(items=occupation_items)))
-        # if pattern == 1:
-            # リッチメニューで対応するため、コメントアウト
-            # messages.append(TextSendMessage(text="Select an action", quick_reply=QuickReply(items=mode_items)))
         if pattern == 2:
             messages.append(TextSendMessage(text="Select the locked state of your bicycle", quick_reply=QuickReply(items=rock_items)))
         if pattern == 3:
