@@ -218,7 +218,7 @@ def errorMessage(lineUserMessage, messageList, pattern):
     messages = []
     if not lineUserMessage in messageList:
         # 冗長なためコメントアウト 
-        # messages.append(TextSendMessage(text="Select an input from the button at the bottom"))
+        messages.append(TextSendMessage(text="Tap the button below"))
         if pattern == -1:
             messages.append(TextSendMessage(text="Select your age", quick_reply=QuickReply(items=age_items)))
         if pattern == 0:
