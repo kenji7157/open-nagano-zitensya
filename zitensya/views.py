@@ -79,7 +79,7 @@ def handle_text_message(event):
                 lineUserObj.occupation = 1
             elif lineUserText == "High school student":
                 lineUserObj.occupation = 2
-            elif lineUserText == "College student"":
+            elif lineUserText == "College student":
                 lineUserObj.occupation = 3
             elif lineUserText == "Other":
                 lineUserObj.occupation = 4            
