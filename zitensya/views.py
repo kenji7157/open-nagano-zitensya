@@ -85,7 +85,6 @@ def handle_text_message(event):
                 lineUserObj.occupation = 4            
             lineUserObj.pattern = 1
             lineUserObj.save()
-            messages = TextSendMessage(text="Finish setting user information")
             messages = [
                     TextSendMessage(text="Finish setting user information"),
                     TextSendMessage(text="Let's calculate safety score")
