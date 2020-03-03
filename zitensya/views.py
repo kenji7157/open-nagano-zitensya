@@ -53,9 +53,6 @@ def handle_text_message(event):
     lineUserText = event.message.text
     profile = line_bot_api.get_profile(event.source.user_id)
     lineUserObj = LineUser.objects.filter(user_id=profile.user_id).first()
-    print('----- lineUserObj ------')
-    print(lineUserObj)
-    print(lineUserObj.pattern)
     if not lineUserObj:
         lineUser = LineUser(user_id=profile.user_id,
                     display_name=profile.display_name)
@@ -89,10 +86,12 @@ def handle_text_message(event):
             lineUserObj.pattern = 1
             lineUserObj.save()
             messages = TextSendMessage(text="Finish setting user information")
+            messages = [
+                    TextSendMessage(text="Finish setting user information"),
+                    TextSendMessage(text="Let's calculate safety score")
+                    ]
     elif lineUserObj.pattern == 1:
         messages = errorMessage(lineUserText, mode_list, lineUserObj.pattern)
-        print('------------ messages --------------')
-        print(messages)
         if len(messages) == 0:
             if lineUserText == "Setting":
                 messages = [
@@ -218,12 +217,10 @@ def calculateScore(lineUserObj):
 
 def errorMessage(lineUserMessage, messageList, pattern):
     messages = []
-    print('----------- pattern -------------')
-    print(pattern)
     if not lineUserMessage in messageList:
-        messages.append(TextSendMessage(text="Select an input from the button at the bottom"))
+        # 冗長なためコメントアウト 
+        # messages.append(TextSendMessage(text="Select an input from the button at the bottom"))
         if pattern == -1:
-            print('ここまできてる？', pattern)
             messages.append(TextSendMessage(text="Select your age", quick_reply=QuickReply(items=age_items)))
         if pattern == 0:
             messages.append(TextSendMessage(text="Select your occupation", quick_reply=QuickReply(items=occupation_items)))
@@ -234,7 +231,6 @@ def errorMessage(lineUserMessage, messageList, pattern):
             messages.append(TextSendMessage(text="Select the locked state of your bicycle", quick_reply=QuickReply(items=rock_items)))
         if pattern == 3:
             messages.append(TextSendMessage(text="Send location", quick_reply=QuickReply(items=local_items)))
-    print('ここまできてる？2', messages)
     return messages
 
 # 変換後の緯度経度をlineUserObjに保存
