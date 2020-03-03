@@ -28,7 +28,7 @@ mode_list = ["Setting", "Calculate safety score"]
 mode_items = [QuickReplyButton(action=MessageAction(label=f"{mode}", text=f"{mode}")) for mode in mode_list]
 rock_list = ["Locked", "Not Locked"]
 rock_items = [QuickReplyButton(action=MessageAction(label=f"{rock}", text=f"{rock}")) for rock in rock_list]             
-locale_list = ["Send location information"]
+locale_list = ["Send location"]
 local_items = [QuickReplyButton(action=LocationAction(label=f"{local}", text=f"{local}")) for local in locale_list]    
 
 def index(request):
@@ -117,10 +117,10 @@ def handle_text_message(event):
                 lineUserObj.is_rock = 0
             lineUserObj.pattern = 3
             lineUserObj.save()
-            messages = TextSendMessage(text="Send location information",
+            messages = TextSendMessage(text="Tap to send location",
                             quick_reply=QuickReply(items=local_items))
     elif lineUserObj.pattern == 3:
-        messages = TextSendMessage(text="Send location information",
+        messages = TextSendMessage(text="Tap to send location",
                             quick_reply=QuickReply(items=local_items))
     line_bot_api.reply_message(event.reply_token, messages=messages)
 
@@ -227,10 +227,13 @@ def errorMessage(lineUserMessage, messageList, pattern):
             messages.append(TextSendMessage(text="Select your age", quick_reply=QuickReply(items=age_items)))
         if pattern == 0:
             messages.append(TextSendMessage(text="Select your occupation", quick_reply=QuickReply(items=occupation_items)))
+        # if pattern == 1:
+            # リッチメニューで対応するため、コメントアウト
+            # messages.append(TextSendMessage(text="Select an action", quick_reply=QuickReply(items=mode_items)))
         if pattern == 2:
             messages.append(TextSendMessage(text="Select the locked state of your bicycle", quick_reply=QuickReply(items=rock_items)))
         if pattern == 3:
-            messages.append(TextSendMessage(text="Send your location", quick_reply=QuickReply(items=local_items)))
+            messages.append(TextSendMessage(text="Send location", quick_reply=QuickReply(items=local_items)))
     return messages
 
 # 変換後の緯度経度をlineUserObjに保存
