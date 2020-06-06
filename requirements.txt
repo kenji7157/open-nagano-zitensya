@@ -1,4 +1,4 @@
-Django==2.2.10
+Django==2.2.13
 line-bot-sdk==1.8.0
 gunicorn
 django-heroku==0.3.1
